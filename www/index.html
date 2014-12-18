@@ -1,126 +1,97 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
+<html lang="en" ng-app="my-app">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css"/>
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css"/>
+    <script src="lib/onsen/js/angular/angular.js"></script>
+    <script src="lib/onsen/js/onsenui.js"></script>
+    <script>
+      var myApp = angular.module('myApp',[]);
+      var module = ons.bootstrap('my-app', ['onsen']);
+      //module.controller('AppController', function($scope) { });
+      //module.controller('PageController', function($scope) {
+      //  ons.ready(function() {
+          // Init code here
+      //  });
+    //  });
+      module.controller('MorningCtrl', function($scope){
+        $scope.greeting = "Good Morning!";
+      });
 
-  <title>My App</title>
+module.controller('MainController', function($scope) {
+  $scope.newTitle = "good";
+  $scope.addTodo = function () {
+  $scope.todos.push({
+    title: Math.random(),
+    done: false
+  });
+};
 
-  <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
-  <link rel="stylesheet" href="styles/app.css"/>
-  <link rel="stylesheet" href="styles/onsen-css-components-blue-basic-theme.css">
 
-  <script src="lib/onsen/js/angular/angular.js"></script>
-  <script src="lib/onsen/js/onsenui.js"></script>
 
-  <script src="cordova.js"></script>
-  <script src="js/app.js"></script>
-  <script>
-    ons.ready(function() {
-    });
-  </script>
+});
 
-  <style>
-    .item {
-      padding: 10px;
-      line-height: 1;
-    }
-    .item-thum {
-      background-color: #ccc;
-      width: 50px;
-      height: 50px;
-      border-radius: 4px;
-    }
-    .item-title {
-      font-size: 15px;
-      font-weight: 500;
-    }
-    .item-desc {
-      font-size: 14px;
-      color: #666;
-      line-height: 1.3;
-      margin: 4px 0 0 0;
-      padding: 0 30px 0 0;
-    }
-    .item-label {
-      font-size: 12px;
-      color: #999;
-      float: right;
-    }
-  </style>
-</head>
+    </script>
+  </head>
+  <body ng-app="App">
+    <ons-navigator var="navigator" ng-controller="MainController">
+      <ons-page>
+        <!-- Page content -->
 
-<body ng-controller="AppController">
+        <ons-tabbar>
+          <ons-tab page="home.html" active="true">
+            <ons-icon icon="ion-home"></ons-icon>
+            <span style="font-size: 14px">Home</span>
+          </ons-tab>
 
-  <ons-navigator>
-    <ons-page>
-      <ons-toolbar>
-        <div class="center">Master Details</div>
-      </ons-toolbar>
+        </ons-tabbar>
 
-      <ons-list ng-controller="MasterController">
-        <ons-list-item modifier="chevron" class="item" ng-repeat="item in items" ng-click="showDetail($index)">
-          <ons-row>
-            <ons-col width="60px">
-              <div class="item-thum"></div>
-            </ons-col>
-            <ons-col>
-              <header>
-                <span class="item-title">{{item.title}}</span>
-                <span class="item-label">{{item.label}}</span>
-              </header>
-              <p class="item-desc">{{item.desc}}</p>
-            </ons-col>
-          </ons-row>
-        </ons-list-item>
-      </ons-list>
-    </ons-page>
-  </ons-navigator>
+        <ons-template id="home.html"  >
+          <form ng-submit="addTodo()">
+        <input class="text-input" id="my-input" ng-model="newTitle">
+        <ons-button type="submit">追加</button>
 
-  <ons-template id="detail.html">
-    <ons-page ng-controller="DetailController">
+          </ons-button>
 
-      <ons-toolbar>
-        <div class="left"><ons-back-button>Back</ons-back-button></div>
-        <div class="center">Details</div>
-      </ons-toolbar>
 
-      <ons-list modifier="inset" style="margin-top: 10px">
-        <ons-list-item class="item">
-          <ons-row>
-            <ons-col width="60px">
-              <div class="item-thum"></div>
-            </ons-col>
-            <ons-col>
-              <header>
-                <span class="item-title">{{item.title}}</span>
-                <span class="item-label">{{item.label}}</span>
-              </header>
-              <p class="item-desc">{{item.desc}}</p>
-            </ons-col>
-          </ons-row>
-        </ons-list-item>
+      <br><br>
 
-        <ons-list-item modifier="chevron" ng-click="doSomething()">
-          <ons-icon icon="ion-chatboxes" fixed-width="true" style="color: #ccc"></ons-icon>
-          Add a note
-        </ons-list-item>
-      </ons-list>
+        <br><br>
+        {{newTitle}}
 
-      <ons-list style="margin-top: 10px">
-        <ons-list-item class="item" ng-repeat="i in [1,2,3]">
-          <header>
-            <span class="item-title">Lorem ipsum dolor sit amet</span>
-          </header>
-          <p class="item-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-        </ons-list-item>
-      </ons-list>
+        <ons-list>
+          <ons-list-header>Member List</ons-list-header>
 
-      <br>
+        <ons-list-item  ng-repeat="todo in todos">
+        <label class="checkbox">
+          <input type="checkbox" ng-model="todo.done">
+          <div class="checkbox__checkmark"></div>
+          <span class="ons-checkbox-inner"></span>
+        </label>
+        test{{ todo.title }}
+      </ons-list-item>
 
-    </ons-page>
-  </ons-template>
+      <ons-list-item>
+      <label class="checkbox">
+      <input type="checkbox">
+      <div class="checkbox__checkmark"></div>
+      <span class="ons-checkbox-inner"></span>
+      </label>
+      山本　浩二
+      </ons-list-item>
 
-</body>
+    </ons-list>
+
+      <ons-button modifier="cta">キープに追加</ons-button>
+      <ons-button modifier="outline">削除</ons-button>
+
+        </form>
+
+        </ons-template>
+
+
+      </ons-page>
+    </ons-navigator>
+  </body>
 </html>
